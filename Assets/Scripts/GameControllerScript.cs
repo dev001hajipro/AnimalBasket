@@ -6,18 +6,17 @@ using UnityEngine.SceneManagement;
 
 public class GameControllerScript : MonoBehaviour
 {
+	private TimeLeftScript script;
 
 	void Start ()
 	{
-		Time.timeScale = 1;
-		TimeLeftScript.timeLeft = 10f;
+		script = GameObject.Find ("TimeLeftText").GetComponent<TimeLeftScript> ();
 	}
 
 	void Update ()
 	{
-		if (TimeLeftScript.timeLeft <= 0) {
-			Time.timeScale = 0; // 時間停止
-			this.gameObject.GetComponent<Utility> ().LoadScene (Utility.SCENE_RESULT);
+		if (script.timeLeft <= 0) {
+			this.gameObject.GetComponent<Utility> ().GoToResultWithoutAnime ();
 		}
 	}
 }
