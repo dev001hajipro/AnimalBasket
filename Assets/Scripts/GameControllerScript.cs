@@ -7,23 +7,17 @@ using UnityEngine.SceneManagement;
 public class GameControllerScript : MonoBehaviour
 {
 
+	void Start ()
+	{
+		Time.timeScale = 1;
+		TimeLeftScript.timeLeft = 10f;
+	}
+
 	void Update ()
 	{
 		if (TimeLeftScript.timeLeft <= 0) {
 			Time.timeScale = 0; // 時間停止
+			this.gameObject.GetComponent<Utility> ().LoadScene (Utility.SCENE_RESULT);
 		}
-	}
-
-	public void RestartScene ()
-	{
-	}
-
-	public void ResetGame ()
-	{
-		Time.timeScale = 1;
-		TimeLeftScript.timeLeft = 10f;
-		//restartButton.gameObject.SetActive (false);
-		//timeIsUpText.gameObject.SetActive (false);
-		//SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
 	}
 }
