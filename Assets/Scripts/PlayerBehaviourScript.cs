@@ -8,10 +8,12 @@ public class PlayerBehaviourScript : MonoBehaviour
 	private Vector2 directon;
 	private Rigidbody2D rb2d;
 	public float force = 10f;
+	private TimeLeftScript tlScript;
 
 	void Start ()
 	{
 		rb2d = GetComponent<Rigidbody2D> ();
+		tlScript = GameObject.Find ("TimeLeftText").GetComponent<TimeLeftScript> ();
 	}
 
 	void Update ()
@@ -22,17 +24,13 @@ public class PlayerBehaviourScript : MonoBehaviour
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		if (other.gameObject.CompareTag ("plus1")) {
-			
-		}
-
 		switch (other.gameObject.tag) {
 		case "plus1":
-			TimeLeftScript.timeLeft += 1f;
+			tlScript.timeLeft += 1f;
 			other.gameObject.SetActive (false);
 			break;
 		case "minus2":
-			TimeLeftScript.timeLeft -= 2f;
+			tlScript.timeLeft -= 2f;
 			other.gameObject.SetActive (false);
 			break;
 		}

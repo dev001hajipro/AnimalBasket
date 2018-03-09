@@ -41,10 +41,19 @@ public class BallBehaviour : MonoBehaviour
 			}
 		}
 		#else
-		if (Input.GetMouseButtonDown (0)) {
+		if (!isPicking && Input.GetMouseButtonDown (0)) {
 			var pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-			if (Physics2D.OverlapPoint (pos) == this.c2d) {
-				isPicking = true;
+			pos.z = 0f;
+			Debug.Log (pos);
+			//if (Physics2D.OverlapPoint (pos) == this.c2d) {
+			if (Physics2D.OverlapPoint (pos)) {
+				var hitObject = Physics2D.Raycast (pos, -Vector2.up);
+				if (hitObject) {
+					Debug.Log ("pickup!!!");
+					isPicking = true;
+				}
+			} else {
+				Debug.Log ("not overlap!!!");
 			}
 		}
 		if (isPicking) {

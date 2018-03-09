@@ -9,7 +9,7 @@ public class TimeLeftScript : MonoBehaviour
 
 	private Text text;
 
-	public static float timeLeft = 10f;
+	public float timeLeft = 10f;
 
 	void Start ()
 	{
