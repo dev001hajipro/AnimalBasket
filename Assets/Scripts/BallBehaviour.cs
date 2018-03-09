@@ -7,13 +7,11 @@ using UnityEngine;
 public class BallBehaviour : MonoBehaviour
 {
 	private Rigidbody2D rb2d;
-	private PolygonCollider2D c2d;
 	private bool isPicking = false;
 
 	void Start ()
 	{
 		rb2d = GetComponent<Rigidbody2D> ();
-		c2d = GetComponent<PolygonCollider2D> ();
 	}
 
 	void Update ()
@@ -22,10 +20,18 @@ public class BallBehaviour : MonoBehaviour
 		if (Input.touchCount > 0) {
 			var touch = Input.touches [0];
 			var touchPos = Camera.main.ScreenToWorldPoint (touch.position);
+			var ray = Camera.main.ScreenPointToRay (touch.position);
 			switch (touch.phase) {
 			case TouchPhase.Began:
-				if (Physics2D.OverlapPoint (touchPos) == this.c2d) {
-					isPicking = true;
+				if (Physics2D.OverlapPoint (touchPos)) {
+					RaycastHit2D hit = Physics2D.Raycast (ray.origin, ray.direction, 100f);
+					// AnimalObjectPoolで生成する際に、コライダーを削除、新規追加
+					// して、スプライトにあったコライダーにしている。
+					// そのため、Start()メソッドでGetComponentで取得した場合、
+					// 常にhit.colliderと一致しなくなる。
+					if (hit.collider == GetComponent<PolygonCollider2D> ()) {
+						isPicking = true;
+					}
 				}
 				break;
 			case TouchPhase.Moved:
@@ -43,17 +49,15 @@ public class BallBehaviour : MonoBehaviour
 		#else
 		if (!isPicking && Input.GetMouseButtonDown (0)) {
 			var pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+			var ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 			pos.z = 0f;
-			Debug.Log (pos);
-			//if (Physics2D.OverlapPoint (pos) == this.c2d) {
 			if (Physics2D.OverlapPoint (pos)) {
-				var hitObject = Physics2D.Raycast (pos, -Vector2.up);
-				if (hitObject) {
+				Debug.Log (ray.direction);
+				RaycastHit2D hit = Physics2D.Raycast (ray.origin, ray.direction, 100f);
+				if (hit.collider == GetComponent<PolygonCollider2D> ()) {
 					Debug.Log ("pickup!!!");
 					isPicking = true;
 				}
-			} else {
-				Debug.Log ("not overlap!!!");
 			}
 		}
 		if (isPicking) {
